@@ -1,7 +1,7 @@
 # pjl
 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fomightez/pjl/master?urlpath=lab/tree/index.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fomightez/pjl/main?urlpath=lab/tree/index.ipynb)
 
 
 *tl;dr:*  
@@ -25,5 +25,5 @@ This repository is set up to make use of the binder service offered by [MyBinder
 
 Click `launch binder` below to start procesing your data.
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fomightez/pjl/master?urlpath=lab/tree/index.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fomightez/pjl/main?urlpath=lab/tree/index.ipynb)
 
