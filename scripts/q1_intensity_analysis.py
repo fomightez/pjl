@@ -9,7 +9,7 @@ __version__ = "0.1.0"
 #
 #*******************************************************************************
 # 
-# PURPOSE: Processes data as advised in Q1 outlint
+# PURPOSE: Processes data as advised in Q1 outline
 # 
 import os
 import sys
