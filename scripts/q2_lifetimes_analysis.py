@@ -27,50 +27,10 @@ import datetime
 ################################################################################
 #######----------------------HELPER FUNCTIONS-----------------------------######
 
-def write_string_to_file(s, fn):
-    '''
-    Takes a string, `s`, and a name for a file & writes the string to the file.
-    '''
-    with open(fn, 'w') as output_file:
-        output_file.write(s)
-
-def out2_stderr_n_log(s,log_file_text):
-    '''
-    Takes a string as input and sends it to the stderr as well as to a building
-    string that will everntually get saved as a Log file.
-    Also needs the Log file to be sent in because gets assigned within the
-    function in order to add to it. Returns the modified `log_file_text`.
-    '''
-    sys.stderr.write(s)
-    log_file_text += s
-    return log_file_text
-
-
-
-def chunk_string(string, chunk_size):
-    """Return a list of n-sized chunks from string of letters."""
-    return [string[i:i+chunk_size] for i in range(0, len(string),chunk_size)] 
-
-
-def strip_off_first_line(fn,set_name,character_to_mark_set_name_end):
-    '''
-    This takes a name of a file & then uses the shell to remove the first line.
-    In order to leave the input file intact, a new multi-sequence FASTA file
-    is made and that is used in place of the one where the label was the first
-    line. The set sample name extracted gets added to the file name.
-    Removing first line based on 
-    https://unix.stackexchange.com/questions/96226/delete-first-line-of-a-file
-    '''
-    name_for_f_without_first_line = (
-        f"{set_name}{character_to_mark_set_name_end}set.fa")
-    #!tail -n +2 {fn} >{name_for_f_without_first_line} 
-    os.system(f"tail -n +2 {fn} >{name_for_f_without_first_line}")
-    return name_for_f_without_first_line
-
+# None yet
 
 #######------------------END OF HELPER FUNCTIONS--------------------------######
 ################################################################################
-
 
 
 
