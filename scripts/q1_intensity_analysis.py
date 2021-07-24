@@ -101,8 +101,8 @@ for fn in csv_files:
     csv_df = pd.read_csv(fn, header=2)
     #collect the maximum in track column
     max_track_for_tracks = csv_df[csv_df.columns[1:]].max(axis=0).tolist()
-    #store the list with the filename as key
-    collected_max_dict[fn] = max_track_for_tracks
+    #store the list with the filename, minus the .csv extension, as key
+    collected_max_dict[fn[:-4]] = max_track_for_tracks
 
 # MAKE A DATAFRAME FROM THE COLLECTED DATA:
 #------------------------------------------------------------------------------#

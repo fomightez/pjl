@@ -101,8 +101,8 @@ for fn in csv_files:
     csv_df = pd.read_csv(fn, header=2)
     #collect the track dureation column
     duration_track = csv_df["Track Duration"].tolist()
-    #store the list with the filename as key
-    collected_durations_dict[fn] = duration_track
+    #store the list with the filename, minus the .csv extension, as key
+    collected_durations_dict[fn[:-4]] = duration_track
 
 # MAKE A DATAFRAME FROM THE COLLECTED DATA:
 #------------------------------------------------------------------------------#
