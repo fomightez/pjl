@@ -85,7 +85,7 @@ for fn,max_list in collected_max_dict.items():
     collected_max_dict_by_sample[extract_sample_id(fn).upper()] += max_list
 
 
-# MAKE A DATAFRAME FROM THE COLLECTED DATA:
+# MAKE A DATAFRAME FROM THE COMBINED DATA:
 #------------------------------------------------------------------------------#
 #df = pd.DataFrame(collected_max_dict) # cannot do this directly like that 
 # because the lists can be different length and get :
