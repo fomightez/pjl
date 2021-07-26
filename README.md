@@ -9,8 +9,6 @@ Quick-start: lick any `launch binder` badge on this page to process your data in
 
 ------
 
-Hello
-
 
 ## To use
 
