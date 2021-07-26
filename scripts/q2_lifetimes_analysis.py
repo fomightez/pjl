@@ -27,7 +27,20 @@ import datetime
 ################################################################################
 #######----------------------HELPER FUNCTIONS-----------------------------######
 
-# None yet
+def extract_sample_id(fn):
+    '''
+    Takes a file name and extracts the sample id.
+
+    Example input:
+
+    ko pod cmc-lch egfp-m1e-v117p 100x002_Plot.csv
+    ko pod cmc-lch egfp-m1e-wt 100x008_Plot.csv
+
+    Example output:
+    v117p
+    wt
+    '''
+    return fn.lower().split("-")[3].split()[0].strip()
 
 #######------------------END OF HELPER FUNCTIONS--------------------------######
 ################################################################################
@@ -64,7 +77,14 @@ for fn in csv_files:
     #store the list with the filename, minus the .csv extension, as key
     collected_durations_dict[fn[:-4]] = duration_track
 
-# MAKE A DATAFRAME FROM THE COLLECTED DATA:
+# COMBINE COLLECTED DATA BASED ON SAMPLE ID:
+#------------------------------------------------------------------------------#
+from collections import defaultdict
+collected_max_dict_by_sample = defaultdict(list)
+for fn,track in collected_durations_dict.items():
+    collected_durations_dict_by_sample[extract_sample_id(fn).upper()] += track
+
+# MAKE A DATAFRAME FROM THE COMBINED DATA:
 #------------------------------------------------------------------------------#
 #df = pd.DataFrame(collected_durations_dict) # cannot do this directly like that 
 # because the lists can be different length and get :
