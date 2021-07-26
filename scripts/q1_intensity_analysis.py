@@ -27,7 +27,20 @@ import datetime
 ################################################################################
 #######----------------------HELPER FUNCTIONS-----------------------------######
 
-# None yet
+def extract_sample_id(fn):
+    '''
+    Takes a file name and extracts the sample id.
+
+    Example input:
+
+    ko pod cmc-lch egfp-m1e-v117p 100x002_Plot.csv
+    ko pod cmc-lch egfp-m1e-wt 100x008_Plot.csv
+
+    Example output:
+    v117p
+    wt
+    '''
+    return fn.lower().split("-")[3].split().strip()
 
 #######------------------END OF HELPER FUNCTIONS--------------------------######
 ################################################################################
@@ -64,6 +77,14 @@ for fn in csv_files:
     #store the list with the filename, minus the .csv extension, as key
     collected_max_dict[fn[:-4]] = max_track_for_tracks
 
+# COMBINE COLLECTED DATA BASED ON SAMPLE ID:
+#------------------------------------------------------------------------------#
+from collections import defaultdict
+collected_max_dict_by_sample = defaultdict(list)
+for fn,max_list in collected_max_dict.items():
+    collected_max_dict_by_sample[extract_sample_id(fn)].append(max_list)
+
+
 # MAKE A DATAFRAME FROM THE COLLECTED DATA:
 #------------------------------------------------------------------------------#
 #df = pd.DataFrame(collected_max_dict) # cannot do this directly like that 
@@ -71,7 +92,7 @@ for fn in csv_files:
 # 'ValueError: arrays must all be same length' Fix below based on 
 # https://stackoverflow.com/a/40442094/8508004 , which makes it from a dict with
 # uneven lists
-df = pd.DataFrame.from_dict(collected_max_dict, orient='index')
+df = pd.DataFrame.from_dict(collected_max_dict_by_sample, orient='index')
 df = df.transpose()
 
 # SAVE THE DATAFRAME AS CSV and EXCEL:
