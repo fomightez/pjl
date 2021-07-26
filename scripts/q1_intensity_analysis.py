@@ -40,7 +40,7 @@ def extract_sample_id(fn):
     v117p
     wt
     '''
-    return fn.lower().split("-")[3].split().strip()
+    return fn.lower().split("-")[3].split()[0].strip()
 
 #######------------------END OF HELPER FUNCTIONS--------------------------######
 ################################################################################
@@ -82,7 +82,7 @@ for fn in csv_files:
 from collections import defaultdict
 collected_max_dict_by_sample = defaultdict(list)
 for fn,max_list in collected_max_dict.items():
-    collected_max_dict_by_sample[extract_sample_id(fn)].append(max_list)
+    collected_max_dict_by_sample[extract_sample_id(fn).upper()] += max_list
 
 
 # MAKE A DATAFRAME FROM THE COLLECTED DATA:
