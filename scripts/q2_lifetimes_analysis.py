@@ -80,7 +80,7 @@ for fn in csv_files:
 # COMBINE COLLECTED DATA BASED ON SAMPLE ID:
 #------------------------------------------------------------------------------#
 from collections import defaultdict
-collected_max_dict_by_sample = defaultdict(list)
+collected_durations_dict_by_sample = defaultdict(list)
 for fn,track in collected_durations_dict.items():
     collected_durations_dict_by_sample[extract_sample_id(fn).upper()] += track
 
@@ -91,7 +91,7 @@ for fn,track in collected_durations_dict.items():
 # 'ValueError: arrays must all be same length' Fix below based on 
 # https://stackoverflow.com/a/40442094/8508004 , which makes it from a dict with
 # uneven lists
-df = pd.DataFrame.from_dict(collected_durations_dict, orient='index')
+df = pd.DataFrame.from_dict(collected_durations_dict_by_sample, orient='index')
 df = df.transpose()
 
 # SAVE THE DATAFRAME AS CSV and EXCEL:
