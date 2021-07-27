@@ -84,6 +84,12 @@ collected_durations_dict_by_sample = defaultdict(list)
 for fn,track in collected_durations_dict.items():
     collected_durations_dict_by_sample[extract_sample_id(fn).upper()] += track
 
+# SORT THE COMBINED DATA:
+#------------------------------------------------------------------------------#
+collected_durations_dict = {k: v.sorted(
+    ) for k,v collected_durations_dict.items()}
+
+
 # MAKE A DATAFRAME FROM THE COMBINED DATA:
 #------------------------------------------------------------------------------#
 #df = pd.DataFrame(collected_durations_dict) # cannot do this directly like that 
