@@ -138,7 +138,7 @@ df.to_csv(spreadsheet_name_prefix+ '.tsv', sep='\t',index = False)
 #    df.WT, bins=bins_for_breakdown, labels=labels_for_bins) # based on 
 # https://stackoverflow.com/a/32801170/8508004  
 
-# MAKE A DATAFRAME OF THE BREAKDOWN BY LIFETIMES CATEGORIES:
+# CATEGORIZE BASED ON LIFETIMES SPECIFICATIONS & MAKE A BREAKDOWN OF CATEGORIES:
 #------------------------------------------------------------------------------#
 count_dfs = []
 for sample in collected_durations_dict_by_sample:
@@ -146,9 +146,17 @@ for sample in collected_durations_dict_by_sample:
     df_for_counts['lifetime category'] = pd.cut(
         df[sample], bins=bins_for_breakdown, labels=labels_for_bins)
     df_for_counts = df_for_counts.groupby(
-        by='lifetime category').size().reset_index(name=sample+'_counts')
+        by='lifetime category').size().reset_index(name=sample)
     count_dfs.append(df_for_counts)
 counts_df = pd.merge(*count_dfs,on='lifetime category')
+# make coloumns multidex
+#multi_tuples = [(
+#    'lifetime category',' '), ('counts','wt'), ('counts','other')] # for 
+# development
+multi_tuples = [(
+    'lifetime category',' ')] + [('counts',x) for x in counts_df.columns[1:]]
+multi_cols = pd.MultiIndex.from_tuples(multi_tuples)
+counts_df.columns=multi_cols
 counts_file_name_prefix = f"lifetimes_breakdown{now.strftime('%b%d%Y%H%M')}"
 counts_df.to_excel(counts_file_name_prefix+'.xlsx')
 counts_df.to_csv(counts_file_name_prefix+ '.tsv', sep='\t',index = False)
