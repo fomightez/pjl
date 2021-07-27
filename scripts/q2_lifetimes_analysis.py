@@ -21,6 +21,30 @@ import datetime
 
 
 
+#*******************************************************************************
+##################################
+#  DEFINED VALUES        #
+
+##################################
+#
+
+## Defines the bins and corresponding labels for breakdown: 
+#(based on specifications)
+# Stable: >300s
+# Long-lived: 300s >= x >90s
+# Productive: 90s >= x > 20s
+# Abortive <= 20s
+# see https://twitter.com/josephofiowa/status/1146043398266195968 about how
+# bins are right inclusive
+bins_for_breakdown = [-float("inf"),20,90,300,float("inf")]
+labels_for_bins=['Abortive', 'Productive', 'Long-lived','Stable']
+
+
+#
+#*******************************************************************************
+#***************************END DEFINED VALUES ********************************
+
+
 
 
 
@@ -86,8 +110,8 @@ for fn,track in collected_durations_dict.items():
 
 # SORT THE COMBINED DATA:
 #------------------------------------------------------------------------------#
-collected_durations_dict = {k: v.sorted(
-    ) for k,v collected_durations_dict.items()}
+[collected_durations_dict_by_sample[s].sort(
+    ) for s in collected_durations_dict_by_sample]
 
 
 # MAKE A DATAFRAME FROM THE COMBINED DATA:
@@ -106,7 +130,28 @@ now = datetime.datetime.now()
 spreadsheet_name_prefix = f"lifetimes_collected{now.strftime('%b%d%Y%H%M')}"
 df.to_excel(spreadsheet_name_prefix+'.xlsx')
 df.to_csv(spreadsheet_name_prefix+ '.tsv', sep='\t',index = False)
-    
+
+
+# CATEGORIZE BASED ON LIFETIMES SPECIFICATIONS:
+#------------------------------------------------------------------------------#    
+#df['lifetime category'] = pd.cut(
+#    df.WT, bins=bins_for_breakdown, labels=labels_for_bins) # based on 
+# https://stackoverflow.com/a/32801170/8508004  
+
+# MAKE A DATAFRAME OF THE BREAKDOWN BY LIFETIMES CATEGORIES:
+#------------------------------------------------------------------------------#
+count_dfs = []
+for sample in collected_durations_dict_by_sample:
+    df_for_counts = df.copy()
+    df_for_counts['lifetime category'] = pd.cut(
+        df[sample], bins=bins_for_breakdown, labels=labels_for_bins)
+    df_for_counts = df_for_counts.groupby(
+        by='lifetime category').size().reset_index(name=sample+'_counts')
+    count_dfs.append(df_for_counts)
+counts_df = pd.merge(*count_dfs,on='lifetime category')
+counts_file_name_prefix = f"lifetimes_breakdown{now.strftime('%b%d%Y%H%M')}"
+counts_df.to_excel(counts_file_name_prefix+'.xlsx')
+counts_df.to_csv(counts_file_name_prefix+ '.tsv', sep='\t',index = False)
 
 
 spinner.stop()
