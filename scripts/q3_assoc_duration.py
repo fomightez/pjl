@@ -50,7 +50,7 @@ def calculate_contact_events_and_totals(col_items):
     '''
     original_number_of_rows = len(col_items)
     #print((col_items > 0.25).sum())
-    contact_events = (col_items > 0.25).sum() # use of `sum()` here is based on
+    contact_events = (col_items <= 0.25).sum() # use of `sum()` here is based on
     # DSM's comment below https://stackoverflow.com/a/23833925/8508004 ; it 
     # works, wheras count doesn't, because the slection part is making a list of 
     # booleans as to whether condition holds and `1` and `True` equate.
