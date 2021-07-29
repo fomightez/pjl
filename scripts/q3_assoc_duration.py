@@ -135,8 +135,8 @@ for sample,ind_df in collected_assoc_duration_dict_by_sample.items():
     #    'WT,'contact_events'), ('WT','total_events'), ('WT,'ratios')] # for 
     # development
     multi_tuples = [(
-        sample,ind_df.columns[0]), ('WT',ind_df.columns[1]), 
-        ('WT',ind_df.columns[2])]
+        sample,ind_df.columns[0]), (sample,ind_df.columns[1]), 
+        (sample,ind_df.columns[2])]
     multi_cols = pd.MultiIndex.from_tuples(multi_tuples)
     ind_df.columns=multi_cols
     collected_assoc_duration_dict_by_sample[sample] = ind_df
