@@ -141,17 +141,16 @@ for sample,ind_df in collected_assoc_duration_dict_by_sample.items():
     ind_df.columns=multi_cols
     collected_assoc_duration_dict_by_sample[sample] = ind_df
 # now to combine
-pd.concat(collected_assoc_duration_dict_by_sample.values(),axis=1)
+resulting_df = pd.concat(
+    collected_assoc_duration_dict_by_sample.values(),axis=1)
 
-df = pd.DataFrame(collected_assoc_duration_dict_by_sample) 
 
-
-# SAVE THE DATAFRAME AS CSV and EXCEL:
+# SAVE THE RESULTING DATAFRAME AS CSV and EXCEL:
 #------------------------------------------------------------------------------#
 now = datetime.datetime.now()
 spreadsheet_name_prefix = f"assoc_duration_collected{now.strftime('%b%d%Y%H%M')}"
-df.to_excel(spreadsheet_name_prefix+'.xlsx')
-df.to_csv(spreadsheet_name_prefix+ '.tsv', sep='\t',index = False)
+resulting_df.to_excel(spreadsheet_name_prefix+'.xlsx')
+resulting_df.to_csv(spreadsheet_name_prefix+ '.tsv', sep='\t',index = False)
     
 
 
