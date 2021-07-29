@@ -146,10 +146,11 @@ for sample in collected_durations_dict_by_sample:
     df_for_counts['lifetime category'] = pd.cut(
         df[sample], bins=bins_for_breakdown, labels=labels_for_bins)
     df_for_counts = df_for_counts.groupby(
-        by='lifetime category').size().reset_index(name=sample)
+        by='lifetime category').size().reset_index(name=sample) # based on 
+    # https://stackoverflow.com/a/32801170/8508004
     count_dfs.append(df_for_counts)
 counts_df = pd.merge(*count_dfs,on='lifetime category')
-# make coloumns multidex
+# make coloumns multiindex
 #multi_tuples = [(
 #    'lifetime category',' '), ('counts','wt'), ('counts','other')] # for 
 # development
