@@ -141,21 +141,22 @@ df.to_csv(spreadsheet_name_prefix+ '.tsv', sep='\t',index = False)
 # CATEGORIZE BASED ON LIFETIMES SPECIFICATIONS & MAKE A BREAKDOWN OF CATEGORIES:
 #------------------------------------------------------------------------------#
 count_dfs = []
+cat_col_name = 'lifetime category'
 for sample in collected_durations_dict_by_sample:
     df_for_counts = df.copy()
-    df_for_counts['lifetime category'] = pd.cut(
+    df_for_counts[cat_col_name] = pd.cut(
         df[sample], bins=bins_for_breakdown, labels=labels_for_bins)
     df_for_counts = df_for_counts.groupby(
-        by='lifetime category').size().reset_index(name=sample) # based on 
+        by=cat_col_name).size().reset_index(name=sample) # based on 
     # https://stackoverflow.com/a/32801170/8508004
     count_dfs.append(df_for_counts)
-counts_df = pd.merge(*count_dfs,on='lifetime category')
+counts_df = pd.merge(*count_dfs,on=cat_col_name)
 # make coloumns multiindex
 #multi_tuples = [(
-#    'lifetime category',' '), ('counts','wt'), ('counts','other')] # for 
+#    f'{cat_col_name}',' '), ('counts','wt'), ('counts','other')] # for 
 # development
 multi_tuples = [(
-    'lifetime category',' ')] + [('counts',x) for x in counts_df.columns[1:]]
+    f'{cat_col_name}',' ')] + [('counts',x) for x in counts_df.columns[1:]]
 multi_cols = pd.MultiIndex.from_tuples(multi_tuples)
 counts_df.columns=multi_cols
 counts_file_name_prefix = f"lifetimes_breakdown{now.strftime('%b%d%Y%H%M')}"
