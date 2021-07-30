@@ -126,7 +126,7 @@ for fn in csv_files:
     # Found https://stackoverflow.com/a/43983654/8508004 to get rid of the 
     # EMPTY column at the end that begins with `Unnamed`
     contact_df = contact_df.loc[:, ~contact_df.columns.str.contains('^Unnamed')]
-    contact_df = contact_df.transpose()
+    contact_df = contact_df.transpose() #now that empty column handled transpose
     # calculate ratio of contact events to total events
     contact_df['ratios'] = contact_df.apply(calculate_ratio, axis=1)
     #store the dataframe with the filename, minus the .csv extension, as key
