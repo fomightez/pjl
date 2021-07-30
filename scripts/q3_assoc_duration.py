@@ -33,14 +33,19 @@ def extract_sample_id(fn):
 
     Example input:
 
+    wt pod cmc-lch 100x005_Detailed.csv
     ko pod cmc-lch egfp-m1e-v117p 100x002_Plot.csv
     ko pod cmc-lch egfp-m1e-wt 100x008_Plot.csv
 
     Example output:
+    wt pod
     v117p
     wt
     '''
-    return fn.lower().split("-")[3].split()[0].strip()
+    if fn.count("-") > 2:
+        return fn.lower().split("-")[3].split()[0].strip()
+    parts = fn.lower().split()
+    return " ".join(parts[:2])
 
 def calculate_contact_events_and_totals(col_items):
     '''
