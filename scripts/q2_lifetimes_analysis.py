@@ -155,7 +155,9 @@ for sample in collected_durations_dict_by_sample:
         by=cat_col_name).size().reset_index(name=sample) # based on 
     # https://stackoverflow.com/a/32801170/8508004
     count_dfs.append(df_for_counts)
-counts_df = pd.merge(*count_dfs,on=cat_col_name)
+from functools import reduce
+counts_df = reduce(
+    lambda left,right: pd.merge(left,right,on=cat_col_name), count_dfs)
 # make coloumns multiindex
 #multi_tuples = [(
 #    f'{cat_col_name}',' '), ('counts','wt'), ('counts','other')] # for 
