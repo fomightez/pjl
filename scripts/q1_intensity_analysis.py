@@ -16,7 +16,6 @@ import sys
 import glob
 import pandas as pd
 from halo import HaloNotebook as Halo
-import fnmatch
 import datetime
 
 
@@ -67,27 +66,38 @@ spinner.start()
 
 # MAKE A LIST OF THE CSV FILES TO ANALYZE:
 #------------------------------------------------------------------------------#
-csv_files = glob.glob("*.csv")
+# recursive search for CSV files in current directory or sub directories
+csv_files = glob.glob("**/*.csv", recursive=True)
+
+# to build in:
+# try  `csv_files = glob.glob("**/*.csv", recursive=True)`
+# if the list is empty, then look for a `.zip` file and unzip it.
+# and then look for the CSV files
+
+
 
 # GO THROUGH CSV FILES COLLECTING THE DATA:
 #------------------------------------------------------------------------------#
 collected_max_dict = {} #initialize a dictionary for collecting the data as it 
 # is processed
 
-for fn in csv_files:
+for pn in csv_files:
     # make a dataframe from the CSV file 
-    csv_df = pd.read_csv(fn, header=2)
+    csv_df = pd.read_csv(pn, header=2)
     #collect the maximum in track column
     max_track_for_tracks = csv_df[csv_df.columns[1:]].max(axis=0).tolist()
-    #store the list with the filename, minus the .csv extension, as key
-    collected_max_dict[fn[:-4]] = max_track_for_tracks
+    #store the list with the pathname, minus the .csv extension, as key
+    collected_max_dict[pn[:-4]] = max_track_for_tracks
 
 # COMBINE COLLECTED DATA BASED ON SAMPLE ID:
 #------------------------------------------------------------------------------#
 from collections import defaultdict
 collected_max_dict_by_sample = defaultdict(list)
-for fn,max_list in collected_max_dict.items():
-    collected_max_dict_by_sample[extract_sample_id(fn).upper()] += max_list
+for pn,max_list in collected_max_dict.items():
+    collected_max_dict_by_sample[extract_sample_id(
+        os.path.basename(pn)).upper()] += max_list # the addition of 
+        # `os.path.basename()` function for the path name insures always gets 
+        # main portion of path, i.e., filename, whether in root or subdirectory 
 
 
 # MAKE A DATAFRAME FROM THE COMBINED DATA:
@@ -123,8 +133,8 @@ if cleaning_step:
     sys.stderr.write("\nCleaning up...be patient...\n")
     spinner = Halo(text='Cleaning up...', spinner='dots',color = 'magenta')
     spinner.start()  
-    for fn in csv_files:
-        os.remove(fn)
+    for pn in csv_files:
+        os.remove(pn)
     #spinner.stop()
     sys.stderr.write("\nCleaning complete.")
 #######------------------END OF MAIN SECTION------------------------------######
