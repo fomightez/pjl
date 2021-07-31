@@ -197,6 +197,7 @@ for sample in collected_assoc_duration_dict_by_sample:
         by=interval_col_name).size().reset_index(name=sample) # based on 
     # https://stackoverflow.com/a/32801170/8508004
     count_dfs.append(df_for_counts)
+from functools import reduce
 counts_df = reduce(
     lambda left,right: pd.merge(left,right,on=interval_col_name), count_dfs)
 # make coloumns multiindex
