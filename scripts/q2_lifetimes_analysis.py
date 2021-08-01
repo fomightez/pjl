@@ -158,8 +158,11 @@ for fn in csv_files:
 #------------------------------------------------------------------------------#
 from collections import defaultdict
 collected_durations_dict_by_sample = defaultdict(list)
-for fn,track in collected_durations_dict.items():
-    collected_durations_dict_by_sample[extract_sample_id(fn).upper()] += track
+for pn,track in collected_durations_dict.items():
+    collected_durations_dict_by_sample[extract_sample_id(
+        os.path.basename(pn)).upper()] += track  # the addition of 
+        # `os.path.basename()` function for the path name insures always gets 
+        # main portion of path, i.e., filename, whether in root or subdirectory
 
 # SORT THE COMBINED DATA:
 #------------------------------------------------------------------------------#

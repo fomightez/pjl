@@ -189,11 +189,14 @@ for fn in csv_files:
 #------------------------------------------------------------------------------#
 from collections import defaultdict
 collected_assoc_duration_dict_by_sample = defaultdict(pd.DataFrame)
-for fn,assoc_df in collected_assoc_duration_dict.items():
+for pn,assoc_df in collected_assoc_duration_dict.items():
     collected_assoc_duration_dict_by_sample[extract_sample_id(
-        fn).upper()] = pd.concat(
+        os.path.basename(pn)).upper()] = pd.concat(
         [collected_assoc_duration_dict_by_sample[extract_sample_id(
-        fn).upper()],assoc_df], ignore_index=True)
+        os.path.basename(pn)).upper()],assoc_df], ignore_index=True)  # the 
+        # addition of `os.path.basename()` function for the path name insures 
+        # always gets main portion of path, i.e., filename, whether in root or 
+        # subdirectory
 
 
 # MAKE SINGLE DATAFRAME BY COMBINING DATA, ADDING SAMPLE IDs AS COLUMN HEADINGS:
