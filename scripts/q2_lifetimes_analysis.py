@@ -107,6 +107,21 @@ if zip_files:
                 "uploaded to the main directory.\n")
         sys.stderr.write(f"The {len(zip_files)} uploaded Zip file(s) contain"
             f" {len(post_unzip_csv_files)-len(init_csv_files)} CSV file(s).\n")
+        subdirectories_w_csvs = list(
+            set([os.path.dirname(pn) for pn in post_unzip_csv_files]))
+        # I was seeing some empty directory names, ie. `''` generated. This next
+        # line removes the empty ones so it doesn't later count thos in main 
+        # directory
+        subdirectories_w_csvs = [x for x in subdirectories_w_csvs if x]
+        if subdirectories_w_csvs:
+            for subdir in subdirectories_w_csvs:
+                count_of_subdir_in_paths = sum(
+                    subdir in s[:len(subdir)] for s in post_unzip_csv_files)# 
+                # based on https://stackoverflow.com/a/45738852/8508004 and I 
+                # added the slice on the length of the string to restrict to 
+                # start of the path
+                sys.stderr.write(f"Subdirectory '{subdir}' contains "
+                    f"{count_of_subdir_in_paths} CSV file(s).\n")
     else:
         sys.stderr.write(f"\n\nThe {len(zip_files)} uploaded Zip file(s) "
             "contained NO CSV files. This seems odd! All okay?\n")
@@ -232,13 +247,13 @@ if cleaning_step:
         # unpacked directories after the deletion of the `csv_files` though so 
         # all those files will exist when `os.remove(pn)` step gets run and so 
         # won't throw errors trying to delete them if already gone.
-        list_of_directories = list(
+        list_of_subdirectories = list(
             set([os.path.dirname(pn) for pn in csv_files]))
         # I was seeing some empty directory names, ie. `''` generated. This next
         # line removes the empty ones
-        list_of_directories = [x for x in list_of_directories if x]
+        list_of_subdirectories = [x for x in list_of_subdirectories if x]
         import shutil
-        [shutil.rmtree(each_dir) for each_dir in list_of_directories]
+        [shutil.rmtree(each_dir) for each_dir in list_of_subdirectories]
         # when the archive gets made on a MAC OS and uploaded to Linux, there 
         # can be `__MACOSX` directory that also gets made and this can delete
         # that recursively, evem if not empty to further clean
