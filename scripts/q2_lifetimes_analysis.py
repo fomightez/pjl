@@ -16,7 +16,6 @@ import sys
 import glob
 import pandas as pd
 from halo import HaloNotebook as Halo
-import fnmatch
 import datetime
 
 
@@ -91,7 +90,9 @@ spinner.start()
 
 # MAKE A LIST OF THE CSV FILES TO ANALYZE:
 #------------------------------------------------------------------------------#
-csv_files = glob.glob("*.csv")
+# recursive search for CSV files in current directory or sub directories
+csv_files = glob.glob("**/*.csv", recursive=True)
+
 
 # GO THROUGH CSV FILES COLLECTING THE DATA:
 #------------------------------------------------------------------------------#
