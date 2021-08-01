@@ -64,7 +64,7 @@ spinner = Halo(text='Processing...', spinner='dots',color = 'magenta')
 spinner.start()
 
 
-# MAKE A LIST OF THE ZIP FILES TO UNPACK:
+# MAKE A LIST OF THE OPTIONAL ZIP FILES TO UNPACK:
 #------------------------------------------------------------------------------#
 sys.stderr.write("Checking if any presumably"
     " CVS file-containing uploaded Zip files present...")
@@ -101,7 +101,7 @@ else:
         "Exiting processing script as there is nothing to do.**\n")
     sys.exit(1)
 
-# to build in:
+# to build in STILL IN NOTEBOOK:
 # IMPORTANTLY, this way of going about collecting the CSV files means you can 
 # mix-and-match uploading CSV files and archives. Even multiple archives are 
 # allowed as long as the names of the archives are different and the dates of 

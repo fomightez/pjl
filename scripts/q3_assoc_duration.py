@@ -91,10 +91,42 @@ spinner = Halo(text='Processing...', spinner='dots',color = 'magenta')
 spinner.start()
 
 
+# MAKE A LIST OF THE OPTIONAL ZIP FILES TO UNPACK:
+#------------------------------------------------------------------------------#
+sys.stderr.write("Checking if any presumably"
+    " CVS file-containing uploaded Zip files present...")
+zip_files = glob.glob("*.zip")
+if zip_files:
+    init_csv_files = glob.glob("**/*.csv", recursive=True)
+    sys.stderr.write(f"{len(zip_files)} detected.\n")
+    sys.stderr.write(f"Unpacking {len(zip_files)} Zip file(s).\n")
+    for zip_file in zip_files:
+        cmd = f'unzip "{zip_file}"'
+        os.system(cmd)
+    post_unzip_csv_files = glob.glob("**/*.csv", recursive=True)
+    if (len(init_csv_files) < len(post_unzip_csv_files)):
+        if init_csv_files:
+            sys.stderr.write(f"{len(init_csv_files)} CSV file(s) were directly "
+                "uploaded to the main directory.\n")
+        sys.stderr.write(f"The {len(zip_files)} uploaded Zip file(s) contain"
+            f" {len(post_unzip_csv_files)-len(init_csv_files)} CSV file(s).\n")
+    else:
+        sys.stderr.write(f"\n\nThe {len(zip_files)} uploaded Zip file(s) "
+            "contained NO CSV files. This seems odd! All okay?\n")
+else:
+    sys.stderr.write("No Zip files detected.\n")
+
+
 # MAKE A LIST OF THE CSV FILES TO ANALYZE:
 #------------------------------------------------------------------------------#
 # recursive search for CSV files in current directory or sub directories
 csv_files = glob.glob("**/*.csv", recursive=True)
+if csv_files:
+    sys.stderr.write(f"\n\nProcessing {len(csv_files)} CSV file(s)...\n")
+else:
+    sys.stderr.write("\n\nNo CSV files detected. That seems odd.\n**"
+        "Exiting processing script as there is nothing to do.**\n")
+    sys.exit(1)
 
 # GO THROUGH CSV FILES COLLECTING THE DATA:
 #------------------------------------------------------------------------------#
@@ -222,15 +254,43 @@ spinner.stop()
 # CLEAN UP SO DIRECTORY NOT SO CLUTTERED SO MORE OBVIOUS WHAT TO DOWNLOAD:
 #------------------------------------------------------------------------------#  
 # Clean up by:
-# 1. deleting the input files so easy to find the derived data files generated
+# 1. deleting the input files (even if added via unpacked zip files) so easy to 
+# find the derived data files generated
 cleaning_step = True
 if cleaning_step:
     sys.stderr.write("\nCleaning up...be patient...\n")
     spinner = Halo(text='Cleaning up...', spinner='dots',color = 'magenta')
     spinner.start()  
-    for fn in csv_files:
-        os.remove(fn)
+    for zip_file in zip_files:
+        os.remove(zip_file) # this way it won't get reused on subsequent 
+        # processing runs
+    for pn in csv_files:
+        os.remove(pn)
+    if zip_files:
+        # There may be directories made from the zip files that correspond to
+        # dates for that set of data. To clean up better it will be nice to also
+        # remove those. The CSV files will already have been deleted but without 
+        # this step the empty directories will be left behind. Only delete the
+        # unpacked directories after the deletion of the `csv_files` though so 
+        # all those files will exist when `os.remove(pn)` step gets run and so 
+        # won't throw errors trying to delete them if already gone.
+        list_of_directories = list(
+            set([os.path.dirname(pn) for pn in csv_files]))
+        # I was seeing some empty directory names, ie. `''` generated. This next
+        # line removes the empty ones
+        list_of_directories = [x for x in list_of_directories if x]
+        import shutil
+        [shutil.rmtree(each_dir) for each_dir in list_of_directories]
+        # when the archive gets made on a MAC OS and uploaded to Linux, there 
+        # can be `__MACOSX` directory that also gets made and this can delete
+        # that recursively, evem if not empty to further clean
+        dn_of_macosx_artifact_directory = "__MACOSX"
+        if os.path.isdir(dn_of_macosx_artifact_directory):
+            shutil.rmtree(dn_of_macosx_artifact_directory)
     #spinner.stop()
     sys.stderr.write("\nCleaning complete.")
+    sys.stderr.write("\nAll data uploaded to this remote system has been "
+        "deleted\nto make the resulting files from the processing easier to "
+        "locate.")
 #######------------------END OF MAIN SECTION------------------------------######
 ################################################################################
