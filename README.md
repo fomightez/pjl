@@ -5,7 +5,7 @@
 
 
 *tl;dr:*  
-Quick-start: lick any `launch binder` badge on this page to process your data inside your browser.
+Quick-start: click any `launch binder` badge on this page to process your data inside your browser.
 
 ------
 
