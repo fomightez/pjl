@@ -142,6 +142,11 @@ collected_max_dict = {} #initialize a dictionary for collecting the data as it
 for pn in csv_files:
     # make a dataframe from the CSV file 
     csv_df = pd.read_csv(pn, header=2)
+    # get rid of empty column at the end that will get a name that begins with
+    # `Unnamed`. The approach worked out in `q3_assoc_duration.py` where it was 
+    # a problem; adding it here just makes things cleaner so no empty cells 
+    # between blocks of data from differet CSV files in the final output TSVs
+    csv_df = csv_df.loc[:, ~csv_df.columns.str.contains('^Unnamed')]
     #collect the maximum in track column
     max_track_for_tracks = csv_df[csv_df.columns[1:]].max(axis=0).tolist()
     #store the list with the pathname, minus the .csv extension, as key
