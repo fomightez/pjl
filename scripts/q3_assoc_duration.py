@@ -153,11 +153,15 @@ collected_assoc_duration_dict = {} #initialize a dictionary for collecting the
 for fn in csv_files:
     # make a dataframe from the CSV file 
     csv_df = pd.read_csv(fn, header=2)
+    # Found https://stackoverflow.com/a/43983654/8508004 to get rid of the 
+    # EMPTY column at the end that begins with `Unnamed`; this was originally
+    # being done after calculate_contact_events_and_totals but before the 
+    # transpose step ; however, makes more sense to just remove that column 
+    # beginning with `Unnamed` right away
+    csv_df = csv_df.loc[:, ~csv_df.columns.str.contains('^Unnamed')]
     #collect the number of contact events and total events from each track
     contact_df = csv_df[csv_df.columns[1:]].apply(
-        calculate_contact_events_and_totals, axis=0) #Note I had to remove the
-    # `.transpose` step until later when I started trying to remove the 
-    # empty column afert I stopped removing cases where total events was zero.
+        calculate_contact_events_and_totals, axis=0).transpose()
     # This below filter is what I originally was doing before told there should 
     # NOT be any actual tracks that have no events.
     # filter out rows where total events is 0.0 and then add a column
@@ -176,10 +180,11 @@ for fn in csv_files:
     #contact_df = contact_df.dropna(axis='columns', how='all') # THIS SHOULD 
     # HAVE WORKED BECAUSE WORKED WITH TOY CSV TESTS BUT DIDN'T WITH REAL CSVs 
     #HERE!!
-    # Found https://stackoverflow.com/a/43983654/8508004 to get rid of the 
-    # EMPTY column at the end that begins with `Unnamed`
-    contact_df = contact_df.loc[:, ~contact_df.columns.str.contains('^Unnamed')]
-    contact_df = contact_df.transpose() #now that empty column handled transpose
+    # Ended up switching to https://stackoverflow.com/a/43983654/8508004 to get 
+    # rid of the EMPTY column at the end that begins with `Unnamed` & moved that
+    # step earlier.
+    # Filter out CCV tracks that have five or less total_events
+    contact_df = contact_df[contact_df['total_events'] > 5]
     # calculate ratio of contact events to total events
     contact_df['ratios'] = contact_df.apply(calculate_ratio, axis=1)
     #store the dataframe with the filename, minus the .csv extension, as key
