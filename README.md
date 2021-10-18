@@ -19,15 +19,15 @@ Once the sessions comes up, pick a notebook to process your data using the guide
 
 ## Citations for underlying tech:
 
-- Python programming language, specifically Python 3 (citation as suggested [here](http://www.citebay.com/how-to-cite/python/):
+- Python programming language, specifically Python 3 (citation as suggested [here](http://www.citebay.com/how-to-cite/python/)):
 
 	- Van Rossum, G., & Drake, F. L. (2009). Python 3 Reference Manual. Scotts Valley, CA: CreateSpace.
 
 	- [Python Software Foundation](https://www.python.org/)
 
-- Pandas - Python Data Analysis Library (citation as suggested [here](https://pandas.pydata.org/about/citing.html):
+- Pandas - Python Data Analysis Library (citation as suggested [here](https://pandas.pydata.org/about/citing.html)):
 
-	- [Data structures for statistical computing in python](https://conference.scipy.org/proceedings/scipy2010/pdfs/mckinney.pdf), McKinney, Proceedings of the 9th Python in Science Conference, Volume 445, 2010. Editors: Stefan van der Walt and Jarrod Millman. doi: [10.25080/Majora-92bf1922-00a](http://dx.doi.org/10.25080/Majora-92bf1922-00a)
+	- [Data structures for statistical computing in python](https://conference.scipy.org/proceedings/scipy2010/pdfs/mckinney.pdf), McKinney, Proceedings of the 9th Python in Science Conference, Volume 445, 2010. Stefan van der Walt and Jarrod Millman (eds.). doi: [10.25080/Majora-92bf1922-00a](http://dx.doi.org/10.25080/Majora-92bf1922-00a)
 
 - Jupyter (citation as suggested [here](https://github.com/jupyter/jupyter/issues/190); nicely summarized, with citation in several formats from [here](https://eprints.soton.ac.uk/403913/)):
 
